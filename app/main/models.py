@@ -1,6 +1,6 @@
 import requests
 import urllib.parse
-from app.spotify_api import (
+from app.main.spotify_api import (
     SpotifyAPI,
     TokenExpiredError,
     NoSongPlayingError

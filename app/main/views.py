@@ -1,16 +1,18 @@
-from app.models import NoSongPlayingError, TokenExpiredError
-from app import app
+from app.main.models import NoSongPlayingError, TokenExpiredError
 from flask import (
+    Blueprint,
     session,
     g,
     redirect,
     request,
     render_template
 )
-from app.models import LyricsAPI
+from app.main.models import LyricsAPI
 
-@app.route("/")
-def main():
+main = Blueprint('main', __name__)
+
+@main.route("/")
+def home():
     if 'access_token' in session:
         try:
             currently_playing = g.sp.get_currently_playing_song()
@@ -34,7 +36,7 @@ def main():
         return redirect(res.url, 302)
 
 
-@app.route("/callback")
+@main.route("/callback")
 def callback():
     code  = request.args.get('code')
 

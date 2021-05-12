@@ -33,6 +33,6 @@ pip3 install -r requirements.txt
 ```
 Then start the app by typing: 
 ```
-export FLASK_APP=app
+export FLASK_APP=run.py
 flask run
 ```
