@@ -97,4 +97,11 @@ class SpotifyAPI:
         if res.status_code != 200:
             raise Exception("http error: ", res.status_code)
 
-        return res.json()
+        json = res.json()
+        try:
+            artist = json['item']['artists'][0]['name']
+            title = json['item']['name']
+
+            return (artist, title)
+        except KeyError as err:
+            raise KeyError("artist or title could not be accessed")

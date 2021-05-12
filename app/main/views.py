@@ -16,11 +16,11 @@ main = Blueprint('main', __name__)
 def home():
     if 'access_token' in session:
         try:
-            currently_playing = g.sp.get_currently_playing_song()
-            lyrics = LyricsAPI.get_lyrics_for_current_playing_song(currently_playing)
-            return render_template('index.html', currently_playing=currently_playing, lyrics=lyrics)
+            artist, title = g.sp.get_currently_playing_song()
+            lyrics = LyricsAPI.get_lyrics(artist, title)
+            return render_template('index.html', artist=artist, title=title, lyrics=lyrics)
         except KeyError as err:
-            return render_template('error.html', error="artist or title could not be accessed")
+            return render_template('error.html', error=err)
         except NoSongPlayingError as err:
             return render_template('error.html', error=err)
         except TokenExpiredError as err:
