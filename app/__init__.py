@@ -20,7 +20,7 @@ def create_app():
     app.register_blueprint(main)
 
     @app.before_request
-    def get_spotify_lyrics():
+    def get_spotify_api():
         g.sp = SpotifyAPI(
             client_id=os.getenv('CLIENT_ID'),
             client_secret=os.getenv('CLIENT_SECRET'),
