@@ -1,4 +1,9 @@
-from app.main.models import NoSongPlayingError, TokenExpiredError
+from app.main.models import (
+    NoSongPlayingError, 
+    TokenExpiredError,
+    LyricsAPI,
+    LyricsNotFound
+)
 from flask import (
     Blueprint,
     session,
@@ -8,7 +13,6 @@ from flask import (
     render_template,
     url_for
 )
-from app.main.models import LyricsAPI
 
 main = Blueprint('main', __name__)
 
