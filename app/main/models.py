@@ -27,7 +27,7 @@ class LyricsAPI:
         res = requests.get(LyricsAPI.lyrics_url + artist + "/" + title)
 
         if res.status_code != 200:
-            raise Exception(f"error fetching lyrics for {artist} - {title}")
+            raise LyricsNotFound(f"error fetching lyrics for {artist} - {title}")
 
         json = res.json()
 
