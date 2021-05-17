@@ -23,6 +23,8 @@ def home():
             return render_template('error.html', error=err)
         except NoSongPlayingError as err:
             return render_template('error.html', error=err)
+        except LyricsNotFound as err:
+            return render_template('error.html', err) 
         except TokenExpiredError as err:
             ret = g.sp.refresh_access_token()
             if 'access_token' in ret:

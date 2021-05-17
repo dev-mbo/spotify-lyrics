@@ -6,6 +6,9 @@ from app.main.spotify_api import (
     NoSongPlayingError
 )
 
+class LyricsNotFound(Exception):
+    '''Lyrics are not available for song'''
+
 class LyricsAPI:
     """
     Get the lyrics for a song
@@ -24,7 +27,7 @@ class LyricsAPI:
         res = requests.get(LyricsAPI.lyrics_url + artist + "/" + title)
 
         if res.status_code != 200:
-            raise Exception("error fetching lyrics")
+            raise Exception(f"error fetching lyrics for {artist} - {title}")
 
         json = res.json()
 
