@@ -1,35 +1,49 @@
 import requests
-import urllib.parse
+import urllib.request
+import unicodedata
 from app.main.spotify_api import (
     SpotifyAPI,
     TokenExpiredError,
     NoSongPlayingError
 )
+from bs4 import BeautifulSoup
 
 class LyricsNotFound(Exception):
     '''Lyrics are not available for song'''
 
-class LyricsAPI:
+class LyricsExtractor:
     """
-    Get the lyrics for a song
+    Extract the lyrics for a song from genius.com 
     """
-    lyrics_url = "https://api.lyrics.ovh/v1/"
-
     def __init__(self):
         pass
 
 
     @staticmethod
     def get_lyrics(artist, title):
-        artist = urllib.parse.quote(artist)
-        title = urllib.parse.quote(title)
+        artist = artist.replace(" ", "-").lower()
+        title = title.replace(" ", "-").lower()
 
-        res = requests.get(LyricsAPI.lyrics_url + artist + "/" + title)
+        artist = unicodedata.normalize('NFD', artist).encode('ascii', 'ignore').decode('utf-8')
+        title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore').decode('utf-8')
 
-        if res.status_code != 200:
+        lyrics_url = "https://genius.com/{artist}-{title}-lyrics".format(artist=artist, title=title)
+
+        print(lyrics_url)
+
+        req = urllib.request.Request(lyrics_url, headers={
+            'User-Agent': 'Mozilla'
+        })
+
+        res = urllib.request.urlopen(req)
+
+        if res.getcode() != 200:
             raise LyricsNotFound(f"error fetching lyrics for {artist} - {title}")
 
-        json = res.json()
+        html = res.read().decode("utf-8")
+        soup = BeautifulSoup(html, "html.parser")
 
-        return json['lyrics']
+        lyrics = soup.find("div", class_="lyrics").get_text()
+
+        return lyrics
 

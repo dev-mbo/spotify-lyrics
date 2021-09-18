@@ -1,7 +1,7 @@
 from app.main.models import (
     NoSongPlayingError, 
     TokenExpiredError,
-    LyricsAPI,
+    LyricsExtractor,
     LyricsNotFound
 )
 from flask import (
@@ -21,7 +21,7 @@ def home():
     if 'access_token' in session:
         try:
             artist, title = g.sp.get_currently_playing_song()
-            lyrics = LyricsAPI.get_lyrics(artist, title)
+            lyrics = LyricsExtractor.get_lyrics(artist, title)
             return render_template('index.html', artist=artist, title=title, lyrics=lyrics)
         except KeyError as err:
             return render_template('error.html', error=err)
