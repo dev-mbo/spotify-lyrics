@@ -21,15 +21,13 @@ class LyricsExtractor:
 
     @staticmethod
     def get_lyrics(artist, title):
-        artist = artist.replace(" ", "-").lower()
+        artist = artist.replace(" ", "-").lower().capitalize()
         title = title.replace(" ", "-").lower()
 
         artist = unicodedata.normalize('NFD', artist).encode('ascii', 'ignore').decode('utf-8')
         title = unicodedata.normalize('NFD', title).encode('ascii', 'ignore').decode('utf-8')
 
         lyrics_url = "https://genius.com/{artist}-{title}-lyrics".format(artist=artist, title=title)
-
-        print(lyrics_url)
 
         req = urllib.request.Request(lyrics_url, headers={
             'User-Agent': 'Mozilla'
@@ -43,7 +41,12 @@ class LyricsExtractor:
         html = res.read().decode("utf-8")
         soup = BeautifulSoup(html, "html.parser")
 
-        lyrics = soup.find("div", class_="lyrics").get_text()
+        result = soup.find("div", class_="lyrics")
+        
+        if result:
+            lyrics = result.get_text()
+        else:
+            lyrics = "No lyrics found"
 
         return lyrics
 
